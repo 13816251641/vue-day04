@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html,body{
+            padding: 0;
+            margin: 0;
+        }
+
+        .header{
+            background-color: orange;
+            height: 80px;
+        }
+        h1{
+            padding: 0;
+            margin: 0;
+        }
+        /*
+            利用flex布局 原理我也不知道
+         */
+        .container{
+            display: flex;
+            height: 600px;
+        }
+        .left{
+            background-color: lightgreen;
+            flex: 2;
+        }
+        .right{
+            background-color: lightpink;
+            flex: 8;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <router-view></router-view>
+        <div class="container">
+            <!--关键还是命名视图!!!-->
+            <router-view name="left"></router-view>
+            <router-view name="right"></router-view>
+        </div>
+    </div>
+</body>
+<script src="lib/vue-2.4.0.js"></script>
+<script src="lib/vue-router-3.0.1.js"></script>
+<script>
+
+    var header={
+        template:"<h1 class='header'>header头部区域</h1>"
+    }
+
+    var leftBox={
+        template: "<h1 class='left'>left侧边区域</h1>"
+    }
+
+    var rightBox={
+        template:"<h1 class='right'>mainBox主体区域</h1>"
+    }
+
+    var router=new VueRouter({
+        routes:[
+            {
+                path:"/",components:{
+                   default:header,
+                   left:leftBox,
+                   right:rightBox
+                }
+            }
+        ]
+    });
+
+    var vm = new Vue({
+        el:"#app",
+        router
+    });
+
+
+
+</script>
+</html>

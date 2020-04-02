@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+        <!--使用路径传参必须要修改路由的匹配规则-->
+        <router-link to="/login/29/lujieni">登录</router-link>
+        <router-link to="/register">注册</router-link>
+        <router-view></router-view>
+    </div>
+</body>
+<script src="lib/vue-2.4.0.js"></script>
+<script src="lib/vue-router-3.0.1.js"></script>
+<script>
+    var login={
+        template:"<h1>登录组件---{{$route.params.age}}---{{$route.params.name}}</h1>",
+        created(){
+            //console.log(this.$route.params.id);
+            console.log(this);
+        }
+    }
+    var register={
+        template:"<h1>注册组件</h1>"
+    }
+
+    var routerObj=new VueRouter({
+        routes: [
+            {path:"/login/:age/:name",component:login},
+            {path:"/register",component: register}
+        ]
+    });
+    var vm = new Vue({
+        el:"#app",
+        router:routerObj
+    });
+</script>
+</html>

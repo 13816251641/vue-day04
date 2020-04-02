@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+        <my-login :parent-msg="msg"></my-login>
+    </div>
+</body>
+<script src="lib/vue-2.4.0.js"></script>
+<script>
+    var login={
+        template:"<h3 @click='change'>这是子组件---{{parentMsg}}</h3>",
+        /*
+            注意:组件中的所有props中的数据,都是通过父组件传递给子组件的
+            把父组件传递过来的parent-msg属性,先在props数组中定义一下这样才能使用
+            props中的数据都是只读的无法重新赋值
+         */
+        props:["parentMsg"],
+        methods:{
+            change(){
+                this.parentMsg = "被修改了";
+            }
+        },
+        /*
+            注意:子组件中的data数据,并不是通过父组件传递过来的,而是子组件自身私有的
+        */
+        data(){
+            return {
+                "title":'123',
+                "content":'qqq'
+            }
+        }
+    }
+
+    Vue.component("myLogin",login);
+
+    var vm = new Vue({
+        el:"#app",
+        data:{
+            msg:"这是父组件的值"
+        },
+        components:{
+            /*
+                子组件中默认无法访问父组件中的数据
+             */
+            myLogin:login
+        }
+    });
+</script>
+</html>

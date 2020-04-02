@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="lib/bootstrap-3.3.7.css">
+</head>
+<body>
+    <div id="app">
+        <comment-box @func="loadComments"></comment-box>
+        <ul class="list-group">
+            <li class="list-group-item" v-for="item in list" :key="item.id">
+                <span class="badge">评论人:{{item.user}}</span>
+                {{item.content}}
+            </li>
+        </ul>
+    </div>
+
+    <template id="temp">
+        <div>
+            <div class="form-group">
+                <label>评论人:</label>
+                <input type="text" class="form-control" v-model="user">
+            </div>
+            <div class="form-group">
+                <label>评论内容:</label>
+                <textarea class="form-control" v-model="content"></textarea>
+            </div>
+            <div class="form-group">
+                <input type="button" value="发表评论" class="btn btn-primary" @click="postComment">
+            </div>
+        </div>
+    </template>
+</body>
+<script src="lib/vue-2.4.0.js"></script>
+<script>
+
+    var commentBox={
+        template:"#temp",
+        data(){
+            return {
+                user:"",
+                content:""
+            }
+        },
+        /*
+            子组件里的方法
+         */
+        methods:{
+            postComment(){
+                /*
+                    1.评论数据存放到哪里去??? 存放到localStorage中 localStorage.setItem('cmts','')
+                    2.先组织出一个最新的评论数据对象
+                    3.想办法,把第二步得到的评论对象保存到localStorage中
+                     3.1 localStorage只支持存放字符串数据,要先调用JSON.stringify
+                     3.2 在保存最新的评论数据之前,要先从localStorage获取到之前的评论数据(string),转为
+                     一个数组对象,然后把最新的评论push到这个数据
+                     3.3 如果获取到的localStorage中的评论字符串为空不存在,则可以返回一个'[]' 让JSON.parse去转换
+                     3.4 把最新的评论列表数据,再次调用JSON.stringify转为数组字符串,然后调用localStorage.setItem
+                 */
+                var comment = {id:Date.now(),user:this.user,content:this.content};
+                var list = JSON.parse(localStorage.getItem("cmts")||'[]');//从localStorage中获取所有的评论
+                list.unshift(comment);
+                localStorage.setItem("cmts",JSON.stringify(list));//重新保存最新的评论数据
+                this.user=this.content="";
+                this.$emit("func");
+            }
+        }
+    }
+
+    var vm = new Vue({
+        el:"#app",
+        data:{
+            list:[
+                {id:Date.now(),user:"李白",content:"天生我材必有用"},
+                {id:Date.now(),user:"江小白",content:"劝君更尽一杯酒"},
+                {id:Date.now(),user:"小马",content:"我姓马,风吹草低见牛羊的马"}
+            ]
+        },
+        created(){
+            this.loadComments();
+        },
+        /*
+            父组件里的方法
+         */
+        methods:{
+            loadComments(){
+                var list = JSON.parse(localStorage.getItem("cmts")||'[]');//从localStorage中获取所有的评论
+                this.list=list;
+            }
+        },
+        components:{
+            commentBox:commentBox
+        }
+    });
+</script>
+</html>

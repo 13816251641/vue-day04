@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+        <my-login></my-login>
+    </div>
+</body>
+<script src="lib/vue-2.4.0.js"></script>
+<script>
+    //定义组件的时候,如果要定义全局的组件,Vue.component("组件的名称",{})
+
+    //通过对象字面量的形式,定义了一个组件模板对象
+    var login={
+        template:"<h3>hello</h3>"
+    }
+
+    /*
+        通过Vue.component把组件模板对象,注册为一个全局的Vue组件,同时为这个组件起了一个
+        名称,可以让我们通过标签形式,在页面中直接引入这个组件
+     */
+    Vue.component("myLogin",login);
+
+    var vm = new Vue({
+        el:"#app"
+    });
+</script>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+        <router-link to="/account">Account</router-link>
+        <router-view></router-view>
+    </div>
+
+    <template id="temp">
+        <div>
+            <h1>这是Account组件</h1>
+            <router-link to="/account/login">登录</router-link>
+            <router-link to="/account/register">注册</router-link>
+
+            <router-view></router-view>
+        </div>
+    </template>
+</body>
+<script src="lib/vue-2.4.0.js"></script>
+<script src="lib/vue-router-3.0.1.js"></script>
+<script>
+    var login={
+        template:"<h3>登录组件</h3>",
+    }
+    var register={
+        template:"<h3>注册组件</h3>"
+    }
+
+    var account={
+        template:"#temp"
+    }
+
+    var routerObj=new VueRouter({
+        routes: [
+            {
+                path:"/account",
+                component:account,
+                //子路由的path前面,不要带/,否则永远以根路径开始请求,不方便用户理解url地址
+                children:[
+                    {path:"login",component:login},
+                    {path:"register",component: register}
+                ]}
+/*            {path:"/account/login",component:login},
+            {path:"/account/register",component:register}*/
+        ]
+    });
+    var vm = new Vue({
+        el:"#app",
+        router:routerObj
+    });
+</script>
+</html>
