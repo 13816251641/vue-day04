@@ -6,22 +6,24 @@
 </head>
 <body>
     <div id="app">
-        <my-login :parent-msg="msg"></my-login>
+        <my-login :parent-msg="info"></my-login>
+        {{info.msg}}
     </div>
 </body>
 <script src="lib/vue-2.4.0.js"></script>
 <script>
     var login={
-        template:"<h3 @click='change'>这是子组件---{{parentMsg}}</h3>",
+        template:"<h3 @click='change'>这是子组件---{{parentMsg.msg}}</h3>",
         /*
             注意:组件中的所有props中的数据,都是通过父组件传递给子组件的
             把父组件传递过来的parent-msg属性,先在props数组中定义一下这样才能使用
-            props中的数据都是只读的无法重新赋值
+            如果传过来的是String,则子组件修改后父组件仍不变;如果传过来的是Object或者
+            数组,子组件修改后父组件中也是会变得!!!
          */
         props:["parentMsg"],
         methods:{
             change(){
-                this.parentMsg = "被修改了";
+                this.parentMsg.msg = "被修改了";//props是单向的
             }
         },
         /*
@@ -35,12 +37,15 @@
         }
     }
 
-    Vue.component("myLogin",login);
+    //Vue.component("myLogin",login);//全局注册
 
     var vm = new Vue({
         el:"#app",
         data:{
-            msg:"这是父组件的值"
+            msg:"这是父组件的值",
+            info:{
+                msg:'呼呼'
+            }
         },
         components:{
             /*

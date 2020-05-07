@@ -27,7 +27,13 @@
         template:"<h3>登录组件</h3>",
     }
     var register={
-        template:"<h3>注册组件</h3>"
+        template:"<h3 @click='show'>注册组件</h3>",
+        methods:{
+            /* 嵌套的路由组件通过this.$root也是可以访问到根组件的数据的 */
+            show(){
+                console.log(this.$root.msg);
+            }
+        }
     }
 
     var account={
@@ -44,13 +50,14 @@
                     {path:"login",component:login},
                     {path:"register",component: register}
                 ]}
-/*            {path:"/account/login",component:login},
-            {path:"/account/register",component:register}*/
         ]
     });
     var vm = new Vue({
         el:"#app",
-        router:routerObj
+        router:routerObj,
+        data:{
+            msg:'root'
+        }
     });
 </script>
 </html>
