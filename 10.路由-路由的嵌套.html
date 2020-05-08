@@ -32,12 +32,18 @@
             /* 嵌套的路由组件通过this.$root也是可以访问到根组件的数据的 */
             show(){
                 console.log(this.$root.msg);
+                console.log(this.$parent.age);
             }
         }
     }
 
     var account={
-        template:"#temp"
+        template:"#temp",
+        data(){
+            return {
+                'age':23
+            }
+        }
     }
 
     var routerObj=new VueRouter({
@@ -49,7 +55,8 @@
                 children:[
                     {path:"login",component:login},
                     {path:"register",component: register}
-                ]}
+                ]
+            }
         ]
     });
     var vm = new Vue({
